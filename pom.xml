@@ -6,7 +6,7 @@
 
     <groupId>com.github.vizaizai</groupId>
     <artifactId>slf4j-jul</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <packaging>jar</packaging>
     <name>slf4j-jul</name>

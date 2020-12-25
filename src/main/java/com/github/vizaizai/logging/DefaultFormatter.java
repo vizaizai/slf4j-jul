@@ -2,9 +2,6 @@ package com.github.vizaizai.logging;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Formatter;
@@ -34,16 +31,10 @@ public class DefaultFormatter extends Formatter {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         String time = dateFormat.format(new Date(record.getMillis()));
-        return String.format(FORMAT, time, this.getThreadName(record), this.getLevel(record.getLevel()),
+        return String.format(FORMAT, time, Thread.currentThread().getName(), this.getLevel(record.getLevel()),
                                      record.getLoggerName(), message, throwable);
     }
 
-    private String getThreadName(LogRecord record) {
-        ThreadMXBean tmx = ManagementFactory.getThreadMXBean();
-        ThreadInfo info = tmx.getThreadInfo(record.getThreadID());
-        return info == null ? "" : info.getThreadName();
-
-    }
 
     private String getLevel(Level level) {
         switch(level.intValue()) {
