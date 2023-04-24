@@ -3,6 +3,7 @@ package com.github.vizaizai.logging;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Formatter;
@@ -34,7 +35,16 @@ public class JDK14LoggerFactory implements ILoggerFactory {
             Formatter formatter = new DefaultFormatter();
             Handler consoleHandler = new ConsoleOutHandler(System.out, formatter);
             consoleHandler.setLevel(Level.ALL);
-            julLogger.addHandler(consoleHandler);
+            Handler[] handlers = julLogger.getHandlers();
+            if (handlers != null && handlers.length > 0) {
+                // 不存在ConsoleOutHandler才加入
+                boolean exists = Arrays.stream(handlers).anyMatch(e -> e instanceof ConsoleOutHandler);
+                if (!exists) {
+                    julLogger.addHandler(consoleHandler);
+                }
+            }else {
+                julLogger.addHandler(consoleHandler);
+            }
             julLogger.setLevel(Level.ALL);
 
             Logger newInstance = new JDK14LoggerAdapter(julLogger);
